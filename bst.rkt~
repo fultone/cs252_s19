@@ -73,25 +73,12 @@
         
 ; ------------------------- BONUS -------------------------
 
-; Returns the last item in a list
-(define last-item
-  (lambda (lst)
-    (if (or (null? lst) (null? (cdr lst))) (car lst)
-        (last-item (cdr lst)))))
-
-; Returns a new list, where the last item of lst has been removed
-(define remove-last
-  (lambda (lst)
-    (if (or (null? lst) (null? (cdr lst))) '()
-        (cons (car lst) (remove-last (cdr lst))))))
-
-
 ; Returns a bst obtained by inserting the integers in a given list one-by-one,
 ; from the left of the list, into an initially empty binary search tree
 (define bst-from-list
   (lambda (lst)
     (if (null? lst) '()
-        (insert (last-item lst) (bst-from-list (remove-last lst))))))
+        (insert (car lst) (bst-from-list (cdr lst))))))
 
 ; Returns true if the tree is well-formed (ie adheres to the definition of bst, where left children
 ; are > their parents, and right children are < their parents), and false otherwise
@@ -109,4 +96,39 @@
                 (proper-tree? (car (cdr bst)))
                 (proper-tree? (car (cdr (cdr bst))))) #t]
           [else #f])))
+
+; ------------------------- Test Area -------------------------
+(define test
+  (lambda (a b)
+    (if (equal? a b) 'pass
+        'FAIL)))
+
+(define tree1 '(2 (4) ()))
+(define tree2 '(8 (3 (1 () ()) (6 () ()) ) (10 () ())))
+(define tree3 'e)
+(define tree4 '(7 (5 (3 (1 () ()) (4 () ())) (6 () ())) (12 (9 (8 () ()) (10 () ())) (15 (13 () ()) (17 () ())))))
+(define tree5 '())
+
+(test (entry tree1) 2)
+(test (entry tree2) 8)
+(test (entry tree3) #f)
+
+;(make-bst 5 '() '())
+;(make-bst 5 '(4) '())
+;(make-bst 5 '(3 () ()) '())
+;(make-bst '8 '(2()()) '())
+
+
+;(preorder tree2)
+;(inorder tree2)
+;(postorder tree2)
+
+;(insert 8.5 tree5)
+;(bst-from-list '(4 9 2 14 6 -3 0))
+
+(proper-tree? tree1)
+(proper-tree? tree2)
+(proper-tree? tree3)
+(proper-tree? tree4)
+(proper-tree? tree5)
 
